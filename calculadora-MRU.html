@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e90ff">
+
+  <title>Calculadora MRU</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #1e90ff;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      font-size: 1em;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #187bcd;
+    }
+    .resultado {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+  </style>
+</head>
+
+
+
+<body>
+  <h1>Calculadora MRU</h1>
+  <div class="container">
+    <label for="tipoCalculo">¿Qué querés calcular?</label>
+    <select id="tipoCalculo">
+      <option value="distancia">Distancia (d = v × t)</option>
+      <option value="velocidad">Velocidad (v = d ÷ t)</option>
+      <option value="tiempo">Tiempo (t = d ÷ v)</option>
+    </select>
+
+    <label for="valor1" id="label1">Velocidad (m/s):</label>
+    <input type="number" id="valor1">
+
+    <label for="valor2" id="label2">Tiempo (s):</label>
+    <input type="number" id="valor2">
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div class="resultado" id="resultado"></div>
+  </div>
+
+  <script>
+    const tipoCalculo = document.getElementById('tipoCalculo');
+    const label1 = document.getElementById('label1');
+    const label2 = document.getElementById('label2');
+    const resultado = document.getElementById('resultado');
+
+    tipoCalculo.addEventListener('change', () => {
+      const tipo = tipoCalculo.value;
+      if (tipo === 'distancia') {
+        label1.textContent = 'Velocidad (m/s):';
+        label2.textContent = 'Tiempo (s):';
+      } else if (tipo === 'velocidad') {
+        label1.textContent = 'Distancia (m):';
+        label2.textContent = 'Tiempo (s):';
+      } else if (tipo === 'tiempo') {
+        label1.textContent = 'Distancia (m):';
+        label2.textContent = 'Velocidad (m/s):';
+      }
+      resultado.textContent = '';
+    });
+
+    function calcular() {
+      const tipo = tipoCalculo.value;
+      const v1 = parseFloat(document.getElementById('valor1').value);
+      const v2 = parseFloat(document.getElementById('valor2').value);
+
+      if (isNaN(v1) || isNaN(v2)) {
+        resultado.textContent = 'Por favor, completá ambos campos.';
+        return;
+      }
+
+      let res = 0;
+      if (tipo === 'distancia') {
+        res = v1 * v2;
+        resultado.textContent = `Distancia: ${res.toFixed(2)} metros`;
+      } else if (tipo === 'velocidad') {
+        res = v1 / v2;
+        resultado.textContent = `Velocidad: ${res.toFixed(2)} m/s`;
+      } else if (tipo === 'tiempo') {
+        res = v1 / v2;
+        resultado.textContent = `Tiempo: ${res.toFixed(2)} segundos`;
+      }
+    }
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("Service Worker registrado"))
+        .catch((err) => console.log("Error al registrar SW:", err));
+    }
+  </script>
+
+</body>
+</html>
